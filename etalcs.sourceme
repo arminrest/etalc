@@ -1,0 +1,29 @@
+export PIPE_BATCH_SYSTEM=None
+
+# define PIPE_DATA (location of the images and other reduction files,
+# in general <somedir>/$PIPE_VERSION/$PIPENAME) and PIPE_SRC (root dir
+# of the source code, in general <somedir>/$PIPE_VERSION/photpipe)
+if [[ $HOSTNAME =~ arminmac* ]]; then
+   export ETALC_ROOTDIR=/Users/arest/eta-car/etalcs
+   export ETALC_DATA_ROOTDIR=$ETALC_ROOTDIR/testdata
+   export ETALC_OUTPUT_ROOTDIR=$ETALC_ROOTDIR/results
+   export ETALC_POSDIR=$ETALC_ROOTDIR/poslists
+   export PIPE_BATCH_SYSTEM=NONE
+elif [[ $HOSTNAME =~ plhstproc* ]]; then
+   export ETALC_ROOTDIR=/astro/armin/eta-car/etalcs
+   export ETALC_DATA_ROOTDIR=/astro/armin/data/v20.0/DECAMNOAO/LEec/workspace
+   export ETALC_OUTPUT_ROOTDIR=$ETALC_ROOTDIR/results
+   export ETALC_POSDIR=$ETALC_ROOTDIR/poslists
+   export PIPE_BATCH_SYSTEM=Condor
+else
+   echo "Hostname $HOSTNAME is not defined yet in the sourceme file!"
+   return 1;
+fi
+
+alias cdpos='cd $ETALC_POSDIR' 
+alias cddata='cd $ETALC_DATA_ROOTDIR' 
+alias cdout='cd $ETALC_OUTPUT_ROOTDIR'
+alias cdsrc='cd $ETALC_ROOTDIR'
+
+export PATH="${ETALC_ROOTDIR}:${PATH}"
+export PS1="\u@\h(ETA_LC)% "

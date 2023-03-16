@@ -1,0 +1,129 @@
+extract_lightecho_lightcurves.py ec0814 42 i ec0814a42.lcpos.txt 
+extract_lightecho_lightcurves.py ec0915 54 i ec0915a54.lcpos.txt 
+extract_lightecho_lightcurves.py ec0915 54 i ec0915a54.lcpos.txt --rootdir /astro/armin/data/v20.0/DECAMNOAO/LEec/workspace
+extract_lightecho_lightcurves.py ec0915 21 i ec0915a21.lcpos.txt --rootdir /astro/armin/data/v20.0/DECAMNOAO/LEec/workspace
+
+zs9 ec0814_tmpl/42/ec0814.130218.178848_ooi_i_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.140202.280398_ooi_i_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.150224.413812_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.141207.384672_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits  ec0814_tmpl/42/ec0814.160225.519s[780_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.170214.620286_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.190228.828470_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.200226.938750_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.210220.966723_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits ec0814_tmpl/42/ec0814.220224.1083405_ooi_i_v1_S5_170116.609377_ooi_i_v1_S5.diff.fits tmpl/42/ec0814.170116.609377_ooi_i_v1_S5.sw.fits &
+
+ ID            RA           Dec    x    y
+  0 10:34:20.3030 -60:38:01.806 3037 1040
+  1 10:34:21.6021 -60:38:06.135 3002 1024
+  2 10:34:22.5155 -60:38:25.646 2977  951
+  3 10:34:25.3608 -60:39:19.302 2899  753
+  4 10:34:13.7637 -60:37:21.964 3216 1187
+  5 10:34:15.0105 -60:37:28.358 3182 1163
+  6 10:34:23.7818 -60:39:07.472 2942  797
+  7 10:34:22.6829 -60:39:17.585 2972  759
+  8 10:34:12.7602 -60:37:54.573 3243 1066
+  9 10:34:20.5249 -60:38:34.434 3031  919
+ 10 10:34:15.7800 -60:38:43.182 3160  886
+ 11 10:34:12.9080 -60:38:11.638 3239 1003
+ 12 10:34:09.7578 -60:37:38.210 3325 1126
+ 13 10:34:09.6206 -60:38:08.395 3328 1015
+ 14 10:34:11.6944 -60:37:38.993 3272 1124
+ 15 10:34:13.7249 -60:39:35.463 3216  692
+ 16 10:34:09.7231 -60:39:25.084 3325  731
+ 17 10:34:09.5064 -60:38:45.705 3331  876
+ 18 10:34:06.8435 -60:39:17.157 3403  760
+ 19 10:34:05.7466 -60:39:17.323 3433  759
+ 20 10:34:20.1543 -60:39:32.367 3041  704
+ 21 10:34:19.9300 -60:39:10.239 3047  786
+
+
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID1_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID2_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID3_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID4_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID5_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 120 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID6_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID7_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID8_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID9_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID10_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID11_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID12_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID13_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID14_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID15_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID16_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID17_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID18_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID19_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID20_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0814a42_i_tmpl609377_3pix_ID21_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -60 --ymax 60 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID1_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID2_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID3_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID4_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID5_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID6_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID7_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 400 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID8_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID9_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID10_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID11_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID12_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID13_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID14_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a21_i_tmpl296582_3pix_ID15_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 160 &
+
+---------
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID1_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -1000 --ymax 100 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID2_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID3_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID4_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -400 --ymax 100 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID5_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID6_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID7_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID8_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -600 --ymax 100 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID9_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -600 --ymax 100 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID10_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 2000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID11_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 2000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID12_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID13_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID14_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID15_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID16_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID17_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID18_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID19_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 1000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID20_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 2000 &
+
+plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID21_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 2000 &
+

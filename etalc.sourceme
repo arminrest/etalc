@@ -4,13 +4,13 @@ export PIPE_BATCH_SYSTEM=None
 # in general <somedir>/$PIPE_VERSION/$PIPENAME) and PIPE_SRC (root dir
 # of the source code, in general <somedir>/$PIPE_VERSION/photpipe)
 if [[ $HOSTNAME =~ arminmac* ]]; then
-   export ETALC_ROOTDIR=/Users/arest/eta-car/etalcs
+   export ETALC_ROOTDIR=/Users/arest/eta-car/etalc
    export ETALC_DATA_ROOTDIR=$ETALC_ROOTDIR/testdata
    export ETALC_OUTPUT_ROOTDIR=$ETALC_ROOTDIR/results
    export ETALC_POSDIR=$ETALC_ROOTDIR/poslists
    export PIPE_BATCH_SYSTEM=NONE
 elif [[ $HOSTNAME =~ plhstproc* ]]; then
-   export ETALC_ROOTDIR=/astro/armin/eta-car/etalcs
+   export ETALC_ROOTDIR=/astro/armin/eta-car/etalc
    export ETALC_DATA_ROOTDIR=/astro/armin/data/v20.0/DECAMNOAO/LEec/workspace
    export ETALC_OUTPUT_ROOTDIR=$ETALC_ROOTDIR/results
    export ETALC_POSDIR=$ETALC_ROOTDIR/poslists

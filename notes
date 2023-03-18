@@ -127,3 +127,46 @@ plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID20_
 
 plotit.py  /Users/arest/eta-car/etalcs/results/ec0915a54_i_tmpl296582_3pix_ID21_difflcs.dat -x mjd -y fluxADU -s --symbol --dy flux_err --xaxis --ymin -160 --ymax 2000 &
 
+(base) arminmac3:ec0915a54 arest$ pwd
+/astro/armin/data/v20.0/ALL/ETA/rawdata/ec0915a54
+(base) arminmac3:ec0915a54 arest$ rsync -avz  */*SOAR* */*SWOPE* */*LDSS3*  */*FTSS*  */*CT4m* */*12????.DECAM* /Users/arest/data/v20.0/DECAMNOAO/LEec/rawdata/2012data
+
+LE_download.py --IDs ec0915 --login arest@stsci.edu Sofilena50% -r 0.1 --filter i --exptime_min 99  -l 843684
+
+ec0915.130218.178843_ooi_i_N22_140329.296582_ooi_i_v1_N22.diff.fits  
+ec0915.170210.619019_ooi_i_v1_N22_140329.296582_ooi_i_v1_N22.diff.fits 
+ec0915.210220.966732_ooi_i_v1_N22_140329.296582_ooi_i_v1_N22.diff.fits
+
+pipeloop.pl -diff ec0915 tmpl 53 -stage FINDNEWIM
+pipeloop.pl -diff ec0915 tmpl 1-62 -id 178843,619019,966732 -stage CPFIX+ -batch
+tar cfvz ec0915_3diffims.tgz */*178843*diff.fits */*966732*diff.fits */*619019*diff.fits 
+ec0915 05 10:40:21.8104 -59:49:40.445
+ec0915 17 10:39:05.3575 -60:10:54.120
+ec0915 16 10:40:32.6390 -60:08:37.447
+ec0915 21 10:48:52.819  -59:24:01.93
+ec0915 51 10:43:50.956  -60:08:38.95
+ec0915 54 10:44:12.8581 -60:17:32.719
+ec0915 59 10:48:36.6364 -60:24:50.799
+         ec0915a13  13 10:39:30.094 -59:52:41.34      0.726 253.92       -30  98    94   -27   -56   113
+         ec0915a15  15 10:39:50.477 -60:03:06.29      0.751 240.15       -28 101    88   -50   -54   115
+         ec0915a16  16 10:40:43.752 -60:08:58.67      0.715 228.93       -31  96    73   -63   -57   112
+         ec0915a19  19 10:44:41.733 -59:23:50.19      0.291 350.82       -64  39     6    39   -80    89
+         ec0915a20  20 10:46:28.747 -59:28:56.93      0.270  41.80       -66  37   -24    27   -81    88
+          ec0915a5   5 10:40:23.503 -59:49:24.68      0.604 256.19       -39  81    79   -19   -65   104
+         ec0915a55  55 10:48:33.934 -60:15:57.02      0.728 143.35       -30  98   -59   -79   -56   113
+57: N26: below 54!
+12+21
+pipeloop.pl -diff ec0915 tmpl 5,13,15,16,17,19,20,21,51,55,57,59 -batch
+
+ec0814.130220.179490_ooi_i.fits.fz     ec0814.190222.826216_ooi_i_v1.fits.fz
+ec0814.130220.179491_ooi_i.fits.fz     ec0814.190228.828470_ooi_i_v1.fits.fz
+ec0814.140225.288116_ooi_i.fits.fz     ec0814.200226.938750_ooi_i_v1.fits.fz
+ec0814.150224.413812_ooi_i_v1.fits.fz  ec0814.210220.966723_ooi_i_v1.fits.fz
+ec0814.160225.519778_ooi_i_v1.fits.fz  ec0814.220224.1083405_ooi_i_v1.fits.fz
+ec0814.160225.519780_ooi_i_v1.fits.fz
+
+pipeloop.pl -diff ec0814 tmpl 1-62 -stage FINDNEWIM -batch
+pipeloop.pl -diff ec0814 tmpl 1-62 -id 179491,519780,826216,966723,1083405 -stage CPFIX+ -batch
+
+extract_ETA_lcs.py ec0814 42 i -outsub v1 -s --skip
+

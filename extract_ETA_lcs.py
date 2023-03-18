@@ -6,7 +6,7 @@ Created on Sun Jan 29 12:08:01 2023
 @author: arest
 """
 
-import os,sys,re
+import os,sys,re,copy,shutil
 import numpy as np
 import glob
 import argparse
@@ -20,6 +20,23 @@ import astropy.units as u
 from pdastro import pdastroclass,pdastrostatsclass,unique
 import matplotlib.pyplot as plt
 
+def addlink2string(s,link):
+    return('<a href="%s">%s</a>' % (link,s))
+
+def imagestring4web(imagename, width=None, height=None):
+    imstring = '<img src="%s"' % imagename
+    if height != None:
+        imstring += f' height={height}'
+        #if isinstance(height,int): height = str(height)
+        #imstring += 'height=%s' % height
+    if width != None:
+        imstring += f' width={width}'
+        #if isinstance(width,int): width = str(width)
+        #imstring += 'width=%s' % width
+    imstring +='>'
+    return(imstring)
+
+
 def initplot(nrows=1, ncols=1, 
              xfigsize4subplot=7, 
              yfigsize4subplot=5, 
@@ -27,7 +44,7 @@ def initplot(nrows=1, ncols=1,
     sp=[]
     xfigsize=xfigsize4subplot*ncols
     yfigsize=yfigsize4subplot*nrows
-    plt.figure(figsize=(xfigsize,yfigsize))
+    fig = plt.figure(figsize=(xfigsize,yfigsize))
     counter=1
     for row in range(nrows):
         for col in range(ncols):
@@ -41,7 +58,7 @@ def initplot(nrows=1, ncols=1,
         sp[i].set_ylabel(sp[i].get_ylabel(),fontsize=14)
         sp[i].set_title(sp[i].get_title(),fontsize=14)
 
-    return(sp)
+    return(sp,fig)
 
 def plotdata(x, y, dx=None, dy=None, sp=None, fmt='bo', alpha=0.5, color='blue', ecolor='k', elinewidth=None, barsabove = False, capsize=1, logx=False, logy=False):
     if sp == None:
@@ -156,6 +173,16 @@ class extract_LE_lcclass(pdastrostatsclass):
         for k in ['ID','x','y','bsize','skip','imID']: dtypeMapping[k]=int 
         self.formattable(dtypeMapping=dtypeMapping,hexcols=['skip'])
         #self.imtable.formattable(dtypeMapping=self.dtypeMapping)
+
+    def TN(self,filename):
+        m = re.search('\.([a-zA-Z0-9]+$)',filename)
+        if m is None:
+            raise RuntimeError(f'Could not get suffix for {filename}')
+        suffix = m.groups()[0] 
+        TNname = re.sub('\.[a-zA-Z0-9]+$','.TN.%s' % suffix,filename)
+        if TNname == filename:
+            raise RuntimeError(f'Could not get thumbnail filename for {filename}')
+        return(TNname)
 
 
     def init_dirs_and_filenames(self,field,ccd,filt,datarootdir=None,
@@ -282,6 +309,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         parser.add_argument('--showfigs', default=False, action='store_true', help='Make light curve plots and show them.')
 
         parser.add_argument('--skip_createlcs_if_exists', default=False, action='store_true', help='Skip recreating the lightcurves if they already exists. Can be used to just recreate plots etc.')
+        parser.add_argument('--skip_createlcplots_if_exists', default=False, action='store_true', help='Skip recreating the lightcurve plots if they already exists.')
 
         
 
@@ -535,11 +563,13 @@ class extract_LE_lcclass(pdastrostatsclass):
 
         return(ixs)
             
-    def plotlelc(self,ixs,sp=None,fmt='bo',mjdcol='mjd',fluxcol='Jyas2',fluxerrcol='Jyas2_err',
+    def plotlelc(self,ixs,sp=None,fig=None,fmt='bo',mjdcol='mjd',fluxcol='Jyas2',fluxerrcol='Jyas2_err',
                  xlim=None,ylim=None,ms=None,
-                 add2y=None,add2x=None,multy=None,yoffset=None,savefig=None):
-        if sp is None:
-            sp=initplot(1,1)[0]
+                 add2y=None,add2x=None,multy=None,yoffset=None,
+                 savefig=None,makeTN=False,thumbnailscale=7.0):
+        if sp is None or fig is None:
+            (sps,fig)=initplot(1,1)
+            sp = sps[0]
 
         ixs = self.ix_not_null([mjdcol,fluxcol,fluxerrcol],indices=ixs)
                    
@@ -594,11 +624,24 @@ class extract_LE_lcclass(pdastrostatsclass):
                 outfilename=savefig
             print(f'Saving plot to {outfilename}')
             plt.savefig(outfilename)
+            if makeTN:
+                figsize = fig.get_size_inches()
+                figsize *= 1.0/thumbnailscale
+                fig.set_size_inches(figsize[0], figsize[1] )
+                #Size = fig.get_size_inches()
+                #print "Size in Inches", Size
+                if self.verbose>1:print("Saving", self.TN(outfilename))
+                fig.savefig(self.TN(outfilename))
+
             
-        return(sp)
+            
+        return(sp,fig)
 
                 
-    def mk_lcplots(self,IDs=None,xypos_indices=None,outbasename=None,lc_indices=None,savefigflag=False,showfigflag=False):
+    def mk_lcplots(self,IDs=None,xypos_indices=None,outbasename=None,lc_indices=None,
+                   savefigflag=False,showfigflag=False,
+                   skip_createlcplots_if_exists=False,
+                   makeTN=False):
         if outbasename is None:
             outbasename = self.outbasename
 
@@ -612,21 +655,86 @@ class extract_LE_lcclass(pdastrostatsclass):
         IDs=sorted(IDs)
         
         for ID in IDs:
-            print(f'making plots for postion ID={ID}')
             ixs_lc_ID = self.ix_equal('ID',ID)
             ixs_lc_ID = self.ix_sort_by_cols(['mjd'],indices=ixs_lc_ID)
             if savefigflag:
                 outfile = f'{outbasename}_ID{ID}_lc.png'
             else:
                 outfile = None
-            self.plotlelc(ixs_lc_ID,savefig=outfile)
+            if skip_createlcplots_if_exists and os.path.isfile(outfile):
+                if self.verbose: print(f'skipping recreating {outfile}')
+                continue
+            print(f'making plots for postion ID={ID}')
+            (sp,fig) = self.plotlelc(ixs_lc_ID,savefig=outfile,makeTN=makeTN)
             if showfigflag:
                 plt.show()
+            plt.close(fig)
+
+    def mk_webpage(self,xypos_indices=None,outbasename=None,
+                   p='100%',
+                   htmlname=None):
+        if outbasename is None:
+            outbasename = self.outbasename
+        if htmlname is None:
+            htmlname = f'{os.path.dirname(outbasename)}/index.html'
+
+        xypos_indices = self.postable.getindices(xypos_indices)
+        
+        postable = copy.deepcopy(self.postable)
+        
+        postable.t['LC']=None
+        for ix_xypos in xypos_indices:
+            ID = postable.t.loc[ix_xypos,'ID']
+            plotfilename = f'{outbasename}_ID{ID}_lc.png'
+            plotTNfilename = self.TN(plotfilename)
+            
+            postable.t.loc[ix_xypos,'LC']=addlink2string(imagestring4web(os.path.basename(plotTNfilename),width=None,height=p),os.path.basename(plotfilename))
+
+            
+        # write the table to index.html
+        print(f'writing html to {htmlname}')
+        f=open(htmlname,'w')
+        #s_asciilink = addlink2string('ascii-table',os.path.basename(asciiname))
+        #f.writelines([f'Level 1+2 Products for {description} ({s_asciilink} here)'])
+        (errorflag,lines)=postable.write(return_lines=True, indices=xypos_indices,  
+                                         htmlflag=True, htmlsortedtable=True, escape=False)
+        if errorflag: raise RuntimeError(f'Soemthing went wrong when doing the webpage table for {outbasename}')
+        f.writelines(lines)
+        f.close()
+        
+        # Make sure sortable.js is in the html directory
+        htmldir = os.path.dirname(htmlname)
+        if not ("ETALC_ROOTDIR" in os.environ):
+            raise RuntimeError("environment variable ETALC_ROOTDIR does not exist!")
+        jsfilename = f'{os.environ["ETALC_ROOTDIR"]}/sortable.js'
+        dest_jsfilename = f'{htmldir}/sortable.js'
+        if not os.path.isfile(dest_jsfilename):
+            if not os.path.isfile(jsfilename):
+                raise RuntimeError(f'java script {jsfilename} for sortable tables does not exist!')
+            shutil.copy(jsfilename, dest_jsfilename)
+
+
+
+        """
+        for ID in IDs:
+            ixs_lc_ID = self.ix_equal('ID',ID)
+            ixs_lc_ID = self.ix_sort_by_cols(['mjd'],indices=ixs_lc_ID)
+            if savefigflag:
+                outfile = f'{outbasename}_ID{ID}_lc.png'
+            else:
+                outfile = None
+            if skip_createlcplots_if_exists and os.path.isfile(outfile):
+                if self.verbose: print(f'skipping recreating {outfile}')
+                continue
+            print(f'making plots for postion ID={ID}')
+        """
             
 if __name__=='__main__':
     etalc = extract_LE_lcclass()
     parser = etalc.define_arguments()
     args = parser.parse_args()
+    
+    etalc.verbose=args.verbose
     
     etalc.init_dirs_and_filenames(args.field,args.ccd,args.filt,
                                   datarootdir=args.datarootdir,posdir=args.posdir,
@@ -652,4 +760,7 @@ if __name__=='__main__':
         etalc.init_output_dirs_and_filenames(outputrootdir=args.outputrootdir,outsubdir=args.outsubdir)
         etalc.save_lcfiles()
     etalc.write()
-    etalc.mk_lcplots(IDs=[3],savefigflag=args.savefigs,showfigflag=args.showfigs)
+    etalc.mk_lcplots(savefigflag=args.savefigs,showfigflag=args.showfigs,
+                     skip_createlcplots_if_exists=args.skip_createlcplots_if_exists,
+                     makeTN=True)
+    etalc.mk_webpage()

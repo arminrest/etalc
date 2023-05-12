@@ -94,8 +94,93 @@ def plotdata(x, y, dx=None, dy=None, sp=None, fmt='bo', alpha=0.5, color='blue',
         return sp, plot, dplot
 
 
+class positionclass(pdastroclass):
+    """
+    class for the table of positions for the lc's
+    """
+    def __init__(self,verbose=0):
+        pdastroclass.__init__(self)
+        self.posfilename = None
 
+    def load_posfile(self, posfilename=None,imagename=None, wcshdr=None, forcexyflag=True):
+        if posfilename is None:
+            if self.posfilename is None:
+                raise RuntimeError('no position filename specified!')
+               
+            posfilename = self.posfilename
+        self.load(posfilename)
+        self.posfilename = posfilename
 
+        if not ('x' in self.t.columns) or forcexyflag:
+    
+            if wcshdr is None:
+                if imagename is None:
+                    raise RuntimeError('no wcsheader nor imagename specified, cannot determine x/y!')
+                wcshdr = fits.getheader(imagename)
+            field_wcs = WCS(wcshdr)
+    
+            (ixs,coords)=self.radeccols_to_SkyCoord(racol='RA',deccol='Dec')
+            self.t['x'],self.t['y'] = field_wcs.world_to_pixel(coords)
+
+            # We should do better rounding here...
+            self.t['x'] = self.t['x'].astype('int')
+            self.t['y'] = self.t['y'].astype('int')
+
+        self.write()
+        
+    def define_arguments(self,parser=None,usage=None,conflict_handler='resolve'):
+        if parser is None:
+            parser = argparse.ArgumentParser(usage=usage,conflict_handler=conflict_handler)
+        parser.add_argument("field", help="name of the light echo field", type=str)
+        parser.add_argument("ccd", help="ddtector number", type=str)
+        
+        self.define_optional_arguments(parser)
+        return(parser)
+
+    def define_optional_arguments(self,parser=None,usage=None,conflict_handler='resolve'):
+        if parser is None:
+            parser = argparse.ArgumentParser(usage=usage,conflict_handler=conflict_handler)
+
+        # default directory for position files
+        if 'ETALC_POSDIR' in os.environ:
+            posdir = os.environ['ETALC_POSDIR']
+        else:
+            posdir = None            
+
+        parser.add_argument("--posfilename", default='auto', type=str, help="file of RA DEC positions to generate light curves. if 'auto', then <inputrootdir>/posfiles/<field>a<ccd>.lcpos.txt  (default=%(default)s)")
+        parser.add_argument("--posdir", default=posdir, help=" position list directory.   (default=%(default)s)")
+
+        return(parser)
+    
+    def set_posfilename(self,field,ccd,
+                        posdir=None,posfilename='auto'):
+        self.field = field
+        self.ccd = ccd
+        self.fieldccdID = f'{self.field}a{self.ccd}'
+
+        if posdir is None: posdir = './poslists'
+
+        # detemine the filname for the positions
+        if posfilename is None or posfilename.lower()=='auto':
+            posfilenameX = os.path.join(posdir,f'{self.fieldccdID}.lcpos.txt')
+            if os.path.isfile(posfilenameX):
+                self.posfilename = posfilenameX
+            else:
+                raise RuntimeError(f'Could not find posfilename {posfilenameX}')
+        else:
+            if os.path.isfile(posfilename):
+                self.posfilename = posfilename
+            else:
+                posfilenameX = os.path.join(posdir,posfilename)
+                if os.path.isfile(posfilenameX):
+                    self.posfilename = posfilenameX
+                else:
+                    raise RuntimeError(f'Could not find posfilename {posfilename}')
+        
+        # Make sure the posfilename is absolute, i.e., remove '~' etc
+        self.posfilename = os.path.abspath(self.posfilename)
+        print(f'position file: {self.posfilename}')
+        return(0)
 
 class extract_LE_lcclass(pdastrostatsclass):
     """
@@ -107,7 +192,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         self.ccd = None
         self.filt = None
         
-        self.postable = pdastroclass()
+        self.postable = positionclass()
         
         self.diff_dir = None
         #self.diff_imgs = None
@@ -206,27 +291,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         if not os.path.isdir(self.tmpl_dir):raise RuntimeError('tmpl directory {self.tmpl_dir} does not exist')
         if not os.path.isdir(self.diff_dir):raise RuntimeError('diffim directory {self.diff_dir} does not exist')
 
-        # detemine the filname for the positions
-        if posfilename is None or posfilename.lower()=='auto':
-            posfilenameX = os.path.join(posdir,f'{self.fieldccdID}.lcpos.txt')
-            if os.path.isfile(posfilenameX):
-                self.posfilename = posfilenameX
-            else:
-                raise RuntimeError(f'Could not find posfilename {posfilenameX}')
-        else:
-            if os.path.isfile(posfilename):
-                self.posfilename = posfilename
-            else:
-                posfilenameX = os.path.join(posdir,posfilename)
-                if os.path.isfile(posfilenameX):
-                    self.posfilename = posfilenameX
-                else:
-                    raise RuntimeError(f'Could not find posfilename {posfilename}')
-        
-        # Make sure the posfilename is absolute, i.e., remove '~' etc
-        self.posfilename = os.path.abspath(self.posfilename)
-        print(f'position file: {self.posfilename}')
-        return(0)
+        self.postable.set_posfilename(field,ccd,posdir=posdir,posfilename=posfilename)
                     
     def init_output_dirs_and_filenames(self,outputrootdir=None,outsubdir=None):
         """
@@ -255,7 +320,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         outputdir = os.path.abspath(outputdir)
         print(f'output directory: {outputdir}')
         
-        posfile_basename = re.sub('\.txt$','',os.path.basename(self.posfilename))
+        posfile_basename = re.sub('\.txt$','',os.path.basename(self.postable.posfilename))
         posfile_basename = re.sub('\.lcpos.*','',posfile_basename)
         #posfile_basename = re.sub('\.lcpos\..*','',posfilename)
         self.outbasename = os.path.join(outputdir,f'{posfile_basename}_{self.filt}_tmpl{self.tmpl_expnum}_{self.box_size}pix')
@@ -283,12 +348,6 @@ class extract_LE_lcclass(pdastrostatsclass):
         else:
             datarootdir = None
 
-        # default directory for position files
-        if 'ETALC_POSDIR' in os.environ:
-            posdir = os.environ['ETALC_POSDIR']
-        else:
-            posdir = None            
-            
         # default directory for output
         if 'ETALC_OUTPUT_ROOTDIR' in os.environ:
             outputrootdir = os.environ['ETALC_OUTPUT_ROOTDIR']
@@ -296,11 +355,8 @@ class extract_LE_lcclass(pdastrostatsclass):
             outputrootdir = None
 
         parser.add_argument("--datarootdir", default=datarootdir, help=" data root directory  (default=%(default)s)")
-        parser.add_argument("--posdir", default=posdir, help=" position list directory.   (default=%(default)s)")
         parser.add_argument("--outputrootdir", default=outputrootdir, help=" output root directory  (default=%(default)s)")
         parser.add_argument('--outsubdir', default=None, help='outsubdir added to output root directory (default=%(default)s)')
-
-        parser.add_argument("--posfilename", default='auto', type=str, help="file of RA DEC positions to generate light curves. if 'auto', then <inputrootdir>/posfiles/<field>a<ccd>.lcpos.txt  (default=%(default)s)")
 
         parser.add_argument("--box_size", type=int, default=3, help="light curve box size along one side in pixels")
 
@@ -311,7 +367,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         parser.add_argument('--skip_createlcs_if_exists', default=False, action='store_true', help='Skip recreating the lightcurves if they already exists. Can be used to just recreate plots etc.')
         parser.add_argument('--skip_createlcplots_if_exists', default=False, action='store_true', help='Skip recreating the lightcurve plots if they already exists.')
 
-        
+        self.postable.define_optional_arguments(parser)
 
         parser.add_argument('-v','--verbose', default=0, action='count')
 
@@ -391,27 +447,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         self.tmpl_expnum = m.groups()[0]
         print(f'template expnum: {self.tmpl_expnum}')
         return(0)
-    
-    def load_posfile(self,posfilename=None,wcshdr=None,forcexyflag=True):
-        if posfilename is None:
-            posfilename = self.posfilename
-        self.postable.load(posfilename)
-
-        if not ('x' in self.postable.t.columns) or forcexyflag:
-    
-            if wcshdr is None:
-                wcshdr = fits.getheader(self.tmpl_name)
-            field_wcs = WCS(wcshdr)
-    
-            (ixs,coords)=self.postable.radeccols_to_SkyCoord(racol='RA',deccol='Dec')
-            self.postable.t['x'],self.postable.t['y'] = field_wcs.world_to_pixel(coords)
-
-            # We should do better rounding here...
-            self.postable.t['x'] = self.postable.t['x'].astype('int')
-            self.postable.t['y'] = self.postable.t['y'].astype('int')
-
-        self.postable.write()
-         
+             
     def calc_lcs(self,box_size=3):
         half_box = int(np.floor(box_size/2))
         # recalculating true box size
@@ -745,7 +781,7 @@ if __name__=='__main__':
     etalc.find_tmpl()
     etalc.find_diffims()
     # Load the positions
-    etalc.load_posfile()
+    etalc.postable.load_posfile(imagename=etalc.tmpl_name)
     
     # calculate the lcs
     if args.skip_createlcs_if_exists:

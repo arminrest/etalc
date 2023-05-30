@@ -168,9 +168,22 @@ ec0814.160225.519780_ooi_i_v1.fits.fz
 pipeloop.pl -diff ec0814 tmpl 1-62 -stage FINDNEWIM -batch
 pipeloop.pl -diff ec0814 tmpl 1-62 -id 179491,519780,826216,966723,1083405 -stage CPFIX+ -batch
 
-extract_ETA_lcs.py ec0814 42 i --outsub v1 -s --skip
+extract_ETA_lcs.py ec0814 42 i --outsub v1 -s --skip_createlcs_if_exists
 extract_ETA_lcs.py ec0915 54 i --outsub v2 -s 
 extract_ETA_lcs.py ec0915 57 i --outsub v2 -s 
 
 extract_ETA_lcs.py ec0915 54 g --outsub v3 -s 
 extract_ETA_lcs.py ec0915 57 g --outsub v3 -s 
+
+reg2pos.py poslists/ec0915a54.test.reg poslists/ec0915a54.test2.reg -o test.delme.lcpos.txt
+reg2pos.py poslists/ec0915a54.test.reg 
+
+LE_download.py --IDs ec0815 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99  -l 178850
+LE_download.py --IDs ec0815 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99  -e 178851 178951
+
+LE_download.py --IDs ec0815 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99  -l 178851
+
+pipeloop.pl -red ec0815 1 -stage FINDNEWIM -redo
+
+pipeloop.pl -red tmpl 1-62 -condor
+pipeloop.pl -red ec0814-ec0915 1-62 -condor

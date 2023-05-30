@@ -677,7 +677,8 @@ class pdastroclass:
         return(indices)    
 
     def newrow(self,dicti=None):
-        self.t = self.t.append(dicti,ignore_index=True)
+        #self.t = self.t.append(dicti,ignore_index=True)
+        self.t = pd.concat([self.t,pd.DataFrame([dicti])],axis=0, ignore_index=True)
         return(self.t.index.values[-1])
 
     def add2row(self,index,dicti):

@@ -102,7 +102,7 @@ class positionclass(pdastroclass):
         pdastroclass.__init__(self)
         self.posfilename = None
 
-    def load_posfile(self, posfilename=None,imagename=None, wcshdr=None, forcexyflag=True):
+    def load_posfile(self, posfilename=None,checkxyflag=True,imagename=None, wcshdr=None, forcexyflag=True):
         if posfilename is None:
             if self.posfilename is None:
                 raise RuntimeError('no position filename specified!')
@@ -110,8 +110,9 @@ class positionclass(pdastroclass):
             posfilename = self.posfilename
         self.load(posfilename)
         self.posfilename = posfilename
-
-        if not ('x' in self.t.columns) or forcexyflag:
+    
+        
+        if checkxyflag and ((not ('x' in self.t.columns)) or forcexyflag):
     
             if wcshdr is None:
                 if imagename is None:
@@ -121,11 +122,11 @@ class positionclass(pdastroclass):
     
             (ixs,coords)=self.radeccols_to_SkyCoord(racol='RA',deccol='Dec')
             self.t['x'],self.t['y'] = field_wcs.world_to_pixel(coords)
-
+    
             # We should do better rounding here...
             self.t['x'] = self.t['x'].astype('int')
             self.t['y'] = self.t['y'].astype('int')
-
+    
         self.write()
         
     def define_arguments(self,parser=None,usage=None,conflict_handler='resolve'):

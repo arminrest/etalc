@@ -17,6 +17,8 @@ from astropy.time import Time
 from astropy.wcs import WCS
 from astropy.coordinates import SkyCoord
 import astropy.units as u
+from astropy.nddata import bitmask
+
 from pdastro import pdastroclass,pdastrostatsclass,unique
 import matplotlib.pyplot as plt
 
@@ -110,7 +112,6 @@ class positionclass(pdastroclass):
             posfilename = self.posfilename
         self.load(posfilename)
         self.posfilename = posfilename
-    
         
         if checkxyflag and ((not ('x' in self.t.columns)) or forcexyflag):
     
@@ -195,6 +196,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         
         self.postable = positionclass()
         
+        self.datarootdir = None
         self.diff_dir = None
         #self.diff_imgs = None
 
@@ -203,6 +205,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         self.tmpl_expnum = None
         
         self.box_size = None
+        self.mask_val = None
  
         self.outbasename = None
         
@@ -211,11 +214,11 @@ class extract_LE_lcclass(pdastrostatsclass):
                          'pipe_nosuccess':0x4}
 
         self.imtable = pdastroclass()
-        self.fitskeys2imtable_required = ['MJD-OBS','ZPTMAGAV','SW_PLTSC']
+        self.fitskeys2imtable_required = ['MJD-OBS','ZPTMAGAV','TZPTMAG','SW_PLTSC','IMSUBD','IMNAME']
         self.fitskeys2imtable_optional = ['CONVOL00','PHOTNORM','KSUM00','FSIG00','FSCAT00',
                                           'NSCALO00','DSGDNPCP','DSGDNSIG','NSCALO00','DIFFSUCC',
                                           'FWHM','M5SIGMA','SKYADU']
-        self.cols_im2lc = ['imID','KSUM00','FSIG00','FSCAT00','FWHM','M5SIGMA','SKYADU']
+        self.cols_im2lc = ['imID','CONVOL00','PHOTNORM','KSUM00','FSIG00','FSCAT00','FWHM','M5SIGMA','SKYADU']
 
     def format_imtable(self):
         self.imtable.default_formatters = {'KSUM00':'{:.4f}'.format,
@@ -239,7 +242,8 @@ class extract_LE_lcclass(pdastrostatsclass):
 
     def format_lctable(self):
         self.default_formatters = {'fluxADU':'{:.2f}'.format, 
-                                   'flux_err':'{:.2f}'.format,          
+                                   'flux_err':'{:.2f}'.format,
+                                   'Npix':'{:d}'.format,
                                    'Jyas2':'{:.3e}'.format,     
                                    'Jyas2_err':'{:.3e}'.format,         
                                    'SB':'{:.3f}'.format,  
@@ -256,7 +260,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         dtypeMapping={}
         for k in ['fluxADU','flux_err','Jyas2','Jyas2_err','SB','KSUM00',
                   'FSIG00','FSCAT00','zpt','FWHM','M5SIGMA','SKYADU']: dtypeMapping[k]=float 
-        for k in ['ID','x','y','bsize','skip','imID']: dtypeMapping[k]=int 
+        for k in ['ID','x','y','bsize','skip','imID','Npix']: dtypeMapping[k]=int 
         self.formattable(dtypeMapping=dtypeMapping,hexcols=['skip'])
         #self.imtable.formattable(dtypeMapping=self.dtypeMapping)
 
@@ -285,8 +289,9 @@ class extract_LE_lcclass(pdastrostatsclass):
         if posdir is None: posdir = '.'
         #if outputrootdir is None: outputrootdir = '.'
         
-        self.tmpl_dir = os.path.join(datarootdir,f'tmpl/{self.ccd}')
-        self.diff_dir = os.path.join(datarootdir,f'{self.field}_tmpl/{self.ccd}')
+        self.datarootdir = os.path.abspath(datarootdir)
+        self.tmpl_dir = os.path.join(self.datarootdir,f'tmpl/{self.ccd}')
+        self.diff_dir = os.path.join(self.datarootdir,f'{self.field}_tmpl/{self.ccd}')
         print(f'tmpl_dir: {self.tmpl_dir}')
         print(f'diff_dir: {self.diff_dir}')
         if not os.path.isdir(self.tmpl_dir):raise RuntimeError('tmpl directory {self.tmpl_dir} does not exist')
@@ -360,6 +365,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         parser.add_argument('--outsubdir', default=None, help='outsubdir added to output root directory (default=%(default)s)')
 
         parser.add_argument("--box_size", type=int, default=3, help="light curve box size along one side in pixels")
+        parser.add_argument("--mask_val", default=0xff00, help="Exclude all pixels with (mask & mask_val)>0 (default=0x%(default)x)")
 
         parser.add_argument('--overwrite', default=False, action='store_true', help='overwrite files if they exist.')
         parser.add_argument('-s','--savefigs', default=False, action='store_true', help='Make light curve plots and save them.')
@@ -392,6 +398,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         self.imtable.t['skip']=0
         # get teh dcmp filename
         self.imtable.replace_regex('diffim','diffdcmp','\.fits$','.dcmp')
+        self.imtable.write()
         
         # Make sure dcmp file exists, if not mark skip=1
         for ix in self.imtable.getindices():
@@ -405,13 +412,26 @@ class extract_LE_lcclass(pdastrostatsclass):
         self.imtable.fitsheader2table('diffdcmp',indices=ixs_good,
                                       requiredfitskeys=self.fitskeys2imtable_required,
                                       optionalfitskey=self.fitskeys2imtable_optional)
+        
+        #delme = []
+        # Get M5SIGMA, but for this we need to access the sw.dcmp files!
+        for ix in self.imtable.getindices():
+            swname = f'{self.datarootdir}/{self.imtable.t.loc[ix,"IMSUBD"]}/{self.imtable.t.loc[ix,"IMNAME"]}'
+            swdcmp = re.sub('\.fits','.dcmp',swname)
+            self.imtable.t.loc[ix,'swdcmp'] = swdcmp
+            #delme.append(os.path.basename(swdcmp))
+        #print(' '.join(delme))
+        self.imtable.fitsheader2table('swdcmp',indices=ixs_good,
+                                      optionalfitskey=['M5SIGMA'])
+        
+        
         # make sure the format is nice
         self.format_imtable()
         # dcmp filename is not needed anymore
-        self.imtable.t.drop(columns=['diffdcmp'],inplace=True)
+        self.imtable.t.drop(columns=['diffdcmp','swdcmp'],inplace=True)
 
         self.imtable.write()
-        
+       
         # This is sanity test: make sure the template expnum is the same than the template expnum in the 
         # difference images, and that there is only one template expnum in the diffims
         tmpl_expnums = self.imtable.t['diffim'].str.extract(f'{self.field}\..*_ooi_{self.filt}_.*\.(\d+)_ooi_.*.diff.fits')
@@ -449,38 +469,66 @@ class extract_LE_lcclass(pdastrostatsclass):
         print(f'template expnum: {self.tmpl_expnum}')
         return(0)
              
-    def calc_lcs(self,box_size=3):
+    def calc_lcs(self,box_size=3,mask_val=0xffff):
+        
+        print(f'mask_val: 0x{mask_val:x}')
+        self.mask_val=mask_val
+        
         half_box = int(np.floor(box_size/2))
         # recalculating true box size
         self.box_size = half_box*2+1
                 
         ixs_pos = self.postable.getindices()
-        ixs_diffims = self.imtable.getindices()
+        #ixs_diffims = self.imtable.getindices()
+        ixs_diffims = self.imtable.ix_sort_by_cols(['MJD-OBS'])
 
         # make a column with noise image
         self.imtable.replace_regex('diffim','diffnoise','\.fits$','.noise.fits')
+        self.imtable.replace_regex('diffim','diffmask','\.fits$','.mask.fits')
 
 
         #diff_bases = [diff_img.split('.fits')[0] for diff_img in self.diff_imgs]
-
+        #self.imtable.write()
+        #sys.exit(0)
         
         #Open each image and get the flux values for each position
         for ix_diffim in ixs_diffims:
             diffim_name = self.imtable.t.loc[ix_diffim,'diffim']
             diffnoise_name = self.imtable.t.loc[ix_diffim,'diffnoise']
-            if self.imtable.t.loc[ix_diffim,'DIFFSUCC']==0:
+            diffmask_name = self.imtable.t.loc[ix_diffim,'diffmask']
+            
+            ### delme just for copying files
+            #src_dir1,src_noise = os.path.split(diffnoise_name)
+            #src_dir2,src_subdir2 = os.path.split(src_dir1)
+            #src_dir3,src_subdir1 = os.path.split(src_dir2)
+            #src_noise = f'/astro/armin/data/v20.0/DECAMNOAO/LEec/workspace/{src_subdir1}/{src_subdir2}/{src_noise}'
+            #if os.path.isfile(diffnoise_name):
+            #    print(f'skipping {diffnoise_name}')
+            #    continue
+            #print(f'cp {src_noise} {diffnoise_name}')
+            #src_mask = f'/astro/armin/data/v20.0/DECAMNOAO/LEec/workspace/{src_subdir1}/{src_subdir2}/{os.path.basename(diffmask_name)}'
+            #if os.path.isfile(diffmask_name):
+            #    print(f'skipping {diffmask_name}')
+            #    continue
+            #print(f'cp {src_mask}  {diffmask_name}')
+            #continue
+            
+            if (self.imtable.t.loc[ix_diffim,'DIFFSUCC']==0):
                 # this should VERY rarely happen!!
                 print(f'##########\n##########  WARNING!! diffim {diffim_name} has DIFFSUCC=0 on fits header, skipping!')
                 self.imtable.t.loc[ix_diffim,'skip']=self.skipmask['pipe_nosuccess'] # pipe_nosuccess=0x4
                 self.imtable.t.loc[ix_diffim,'error']=self.skipmask['pipe_nosuccess'] # pipe_nosuccess=0x4
+                sys.exit(0)
                 continue
 
             try:
-                #get the image and noise data
+                #get the image, mask, and noise data
                 with fits.open(diffim_name) as diffim_hdu:
                     img = diffim_hdu[0].data
                 with fits.open(diffnoise_name) as diffnoise_hdu:
                     nse = diffnoise_hdu[0].data
+                with fits.open(diffmask_name) as diffmask_hdu:
+                    msk = diffmask_hdu[0].data
             except:
                 print(f'##########\n##########  WARNING!! one of the files for {diffim_name} does not exist, skipping!')
                 self.imtable.t.loc[ix_diffim,'skip']=self.skipmask['missing_noise'] # missing_noise=0x2
@@ -494,20 +542,33 @@ class extract_LE_lcclass(pdastrostatsclass):
             #pixscale = float(hdr['SW_PLTSC']) #arcsec per pix
             
             mjd = self.imtable.t.loc[ix_diffim,'MJD-OBS']
-            zpmag = self.imtable.t.loc[ix_diffim,'ZPTMAGAV']
+            if self.imtable.t.loc[ix_diffim,'PHOTNORM'] == 't':
+                zpmag = self.imtable.t.loc[ix_diffim,'TZPTMAG']
+                print(f'Using template zeropoint {zpmag}')
+            else:    
+                zpmag = self.imtable.t.loc[ix_diffim,'ZPTMAGAV']
+                print(f'Using ZPTMAGAV={zpmag}')
             pixscale = self.imtable.t.loc[ix_diffim,'SW_PLTSC'] #arcsec per pix
             
             for ix_pos in ixs_pos:
                 xpix = self.postable.t.loc[ix_pos,'x']
                 ypix = self.postable.t.loc[ix_pos,'y']
+                
+                # get the pixel values for image, noise, and mask
                 img_box = img[ypix-half_box:ypix+half_box+1,xpix-half_box:xpix+half_box+1]
                 wht_box = 1.0/(nse[ypix-half_box:ypix+half_box+1,xpix-half_box:xpix+half_box+1]**2)
-    
-            #for j in range(len(xpix)):
-            #    img_box = img[ypix[j]-half_box:ypix[j]+half_box+1,xpix[j]-half_box:xpix[j]+half_box+1]
-            #    wht_box = 1.0/(nse[ypix[j]-half_box:ypix[j]+half_box+1,xpix[j]-half_box:xpix[j]+half_box+1]**2)
-                wht_box[~np.isfinite(wht_box)] = np.zeros(np.shape(wht_box))[~np.isfinite(wht_box)]
+                mask_box = msk[ypix-half_box:ypix+half_box+1,xpix-half_box:xpix+half_box+1]
                 
+                #print('img_box',img_box)
+                #print('wht_box',wht_box)
+                #print('mask_box',mask_box)
+                
+                # only use unmasked image, based on mask_val
+                unmasked_pixels = np.where(bitmask.bitfield_to_boolean_mask(mask_box,ignore_flags=~mask_val,good_mask_value=True))
+                img_box_unmasked = img_box[unmasked_pixels]
+                wht_box_unmasked = wht_box[unmasked_pixels]
+                #print(f'img_box_unmasked 0x{mask_val:x}',unmasked_pixels,img_box_unmasked)
+                    
                 ix_lc = self.newrow({'ID':self.postable.t.loc[ix_pos,'ID'],
                                         'x':self.postable.t.loc[ix_pos,'x'],
                                         'y':self.postable.t.loc[ix_pos,'y'],
@@ -516,22 +577,25 @@ class extract_LE_lcclass(pdastrostatsclass):
                                         'zpt':zpmag,
                                         'fluxADU':np.nan,
                                         'flux_err':np.nan,
+                                        'Npix':0,
                                         'Jyas2':np.nan,
                                         'Jyas2_err':np.nan,
                                         'SB':np.nan,
                                         'SB_err':np.nan
                                         })
-                if np.sum(wht_box) == 0.0:
-                    print(f'Warning: no flux at {self.postable.t.loc[ix_pos,"x"]} {self.postable.t.loc[ix_pos,"x"]} for image {diffim_name}')
+                if np.sum(wht_box_unmasked) == 0.0:
+                    print(f'Warning: no flux at {self.postable.t.loc[ix_pos,"x"]} {self.postable.t.loc[ix_pos,"y"]} for image {diffim_name}')
                 else:
-                    fluxADU = np.average(img_box, weights = wht_box)  #ADU per pixel
-                    errADU = np.sqrt(1.0/np.sum(wht_box))
+                    fluxADU = np.average(img_box_unmasked, weights = wht_box_unmasked)  #ADU per pixel
+                    errADU = np.sqrt(1.0/np.sum(wht_box_unmasked))
+                    #print('ffff',fluxADU,errADU)
     
                     Jyas2 = 3631.0 * 10**(-0.4*zpmag) * fluxADU / (pixscale**2)
                     Jyas2_err = 3631.0 * 10**(-0.4*zpmag) * errADU / (pixscale**2)
                     
                     self.t.loc[ix_lc,'fluxADU']=fluxADU
                     self.t.loc[ix_lc,'flux_err']=errADU
+                    self.t.loc[ix_lc,'Npix']=len(img_box_unmasked)
                     self.t.loc[ix_lc,'Jyas2']=Jyas2
                     self.t.loc[ix_lc,'Jyas2_err']=Jyas2_err
     
@@ -544,10 +608,14 @@ class extract_LE_lcclass(pdastrostatsclass):
                 #for col in self.cols_im2lc:
                 self.t.loc[ix_lc,'skip']= int(self.imtable.t.loc[ix_diffim,'skip'])
                 self.t.loc[ix_lc,self.cols_im2lc] = self.imtable.t.loc[ix_diffim,self.cols_im2lc]
+
+            #self.format_lctable()
+            #self.write()
+            #sys.exit(0)
         
         #self.formattable(hexcols=['skip'])
         self.format_lctable()
-        self.imtable.t.drop(columns=['diffnoise'],inplace=True)
+        self.imtable.t.drop(columns=['diffnoise','diffmask'],inplace=True)
 
     def load_lcfiles(self,outbasename=None):
         if outbasename is None:
@@ -771,6 +839,11 @@ if __name__=='__main__':
     parser = etalc.define_arguments()
     args = parser.parse_args()
     
+    if isinstance(args.mask_val,str):
+        mask_val = int(eval(args.mask_val))
+    else:
+        mask_val = args.mask_val
+    
     etalc.verbose=args.verbose
     
     etalc.init_dirs_and_filenames(args.field,args.ccd,args.filt,
@@ -789,11 +862,12 @@ if __name__=='__main__':
         # recalculating true box size
         print('!!! skipping recreating lcs!!!!')
         etalc.box_size = int(np.floor(args.box_size/2))*2+1
+        etalc.mask_val = mask_val
         etalc.init_output_dirs_and_filenames(outputrootdir=args.outputrootdir,outsubdir=args.outsubdir)
         etalc.load_lcfiles()
         #etalc.imtable.write()
     else:
-        etalc.calc_lcs(box_size=args.box_size)
+        etalc.calc_lcs(box_size=args.box_size, mask_val = mask_val)
         etalc.init_output_dirs_and_filenames(outputrootdir=args.outputrootdir,outsubdir=args.outsubdir)
         etalc.save_lcfiles()
     etalc.write()

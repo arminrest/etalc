@@ -671,7 +671,7 @@ class pdastroclass:
         # get the indices based on input.
         indices=self.getindices(indices)  
         
-        self.t.loc[indices,destcol]  = self.t.loc[indices,col].str.replace(regex,substitution)
+        self.t.loc[indices,destcol]  = self.t.loc[indices,col].str.replace(regex,substitution,regex=True)
         #self.imtable.t.loc[indices,destcol] = replace_results[0].values
     
         return(indices)    

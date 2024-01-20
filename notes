@@ -187,3 +187,39 @@ pipeloop.pl -red ec0815 1 -stage FINDNEWIM -redo
 
 pipeloop.pl -red tmpl 1-62 -condor
 pipeloop.pl -red ec0814-ec0915 1-62 -condor
+
+LE_download.py --IDs ec0814 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 829174 523744 609377 523449 --deepl
+
+LE_download.py --IDs ec0815 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 523450 523451 523452 828474 --deepl
+
+LE_download.py --IDs ec0914 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 966718 966719 --deepl
+
+LE_download.py --IDs ec0915 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 523730 966731 523435 523733 --deepl
+
+LE_download.py --IDs ec0916 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 966726 966729 --deepl
+
+LE_download.py --IDs ec1014 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 523438 921780 609365 523737 --deepl
+
+LE_download.py --IDs ec1015 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99 --tmpl  -l 523738 523739 609367 609368 --deepl
+
+
+pipeloop.pl -red tmpl 1-62 -condor
+pipeloop.pl -diff ec0814-ec1016 tmpl 1-62 -stage MATCHTEMPL+ -condor -redo
+
+/Users/arest/eta-car/etalc/ec0915a5457_images
+arest@arminmac3(ETA_LC)% zs9 54/*fits SPITZER_I4_12914176_0000_6_E8351909_maic.fits -region 
+ ../poslists/ec0915a54.lcpos.jj.reg
+
+extract_ETA_lcs.py ec0915 54 i --outsub v4 -s --posfil ec0915a54.jj2.lcpos.txt 
+
+plotit.py ec0915a54_g_tmpl923832_3pix_ID10_lc.txt  --symbol -f bs -s -x mjd -y Jyas2 --dy Jyas2_err --nolegend --xaxis &
+ plotit.py ec0915a54_g_tmpl923832_3pix_ID10_lc.txt ec0915a54_i_tmpl296582_3pix_ID10_lc.txt  --symbol -f bs,ro -s -x mjd -y Jyas2 --dy Jyas2_err --nolegend --xaxis --add2y 0,0.65E-5 --ylabel 'Diff. flux ($\mu$Jy/arcsec$^{-1}$)' --mult2y 1E6,1E6 &
+
+plotit.py ec0915a54_g_tmpl923832_3pix_ID10_lc.txt ec0915a54_i_tmpl296582_3pix_ID10_lc.txt  --symbol -f bs,ro -s -x mjd -y Jyas2 --dy Jyas2_err  --xaxis --add2y 0,0.65E-5 --ylabel 'Diff. flux ($\mu$Jy/arcsec$^{-1}$)' --mult2y 1E6,1E6 -l g,i &
+
+
+LE_download.py --IDs ec0814  ec0815  ec0914  ec0915  ec0916  ec1014  ec1015 --login arest@stsci.edu Sofilena50% -r 0.1  --exptime_min 99  --filter g r i z
+
+pipeloop.pl -diff ec0814-ec1016 tmpl 1-62  -redobad -batch
+
+extract_ETA_lcs.py ec0915 54 i --outsub v4 -s 

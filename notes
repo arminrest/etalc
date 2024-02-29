@@ -223,3 +223,7 @@ LE_download.py --IDs ec0814  ec0815  ec0914  ec0915  ec0916  ec1014  ec1015 --lo
 pipeloop.pl -diff ec0814-ec1016 tmpl 1-62  -redobad -batch
 
 extract_ETA_lcs.py ec0915 54 i --outsub v4 -s 
+
+extract_ETA_lcs.py ec0915 54 --outsub v6 -s 
+
+mkwebpage_ETA_lcs.py ec0915 54 --outsub v6 -v --savefigs

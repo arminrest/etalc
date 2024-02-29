@@ -447,9 +447,16 @@ class extract_LE_lcclass(pdastrostatsclass):
             swdcmp = re.sub('\.fits','.dcmp',swname)
             self.imtable.t.loc[ix,'swdcmp'] = swdcmp
             #delme.append(os.path.basename(swdcmp))
-            photcode = int(eval(self.imtable.t.loc[ix,'PHOTCODE']))
-            self.imtable.t.loc[ix,'PHOTCODE'] = photcode & 0xffff
-            self.imtable.t.loc[ix,'filter'] = photcode2filter[photcode & 0xff]
+            try: 
+                photcode = int(eval(self.imtable.t.loc[ix,'PHOTCODE']))
+                self.imtable.t.loc[ix,'PHOTCODE'] = photcode & 0xffff
+                self.imtable.t.loc[ix,'filter'] = photcode2filter[photcode & 0xff]
+            except:
+                self.imtable.t.loc[ix,'PHOTCODE'] = 0
+                self.imtable.t.loc[ix,'filter'] = 'x'
+                self.imtable.t['error']=1
+                self.imtable.t['skip']=1
+                
             
             
         #print(' '.join(delme))

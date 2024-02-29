@@ -1,0 +1,277 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+point(10:44:28.8192,-60:15:30.791) # point=circle color=cyan
+point(10:44:26.1794,-60:15:49.868) # point=circle color=cyan
+point(10:44:17.4257,-60:16:08.108) # point=circle color=cyan
+point(10:44:15.6884,-60:16:22.738) # point=circle color=cyan
+point(10:44:15.5489,-60:16:25.052) # point=circle color=cyan
+point(10:44:15.5473,-60:16:28.399) # point=circle color=cyan
+point(10:44:14.8506,-60:16:37.907) # point=circle color=cyan
+point(10:44:14.6409,-60:16:42.020) # point=circle color=cyan
+point(10:44:14.5134,-60:16:45.705) # point=circle color=cyan
+point(10:44:13.5976,-60:16:51.776) # point=circle color=cyan
+point(10:44:17.3408,-60:16:32.734) # point=circle color=cyan
+point(10:44:06.1283,-60:16:15.893) # point=circle color=cyan
+point(10:44:08.6730,-60:16:44.561) # point=circle color=cyan
+point(10:44:08.3199,-60:16:54.996) # point=circle color=cyan
+point(10:44:06.3238,-60:15:54.158) # point=circle color=cyan
+point(10:44:23.0031,-60:15:45.967) # point=circle color=cyan
+point(10:44:22.5576,-60:15:43.771) # point=circle color=cyan
+point(10:44:18.7404,-60:16:08.912) # point=circle color=cyan
+point(10:44:19.5495,-60:16:06.347) # point=circle color=cyan
+point(10:44:08.0808,-60:17:14.278) # point=circle color=cyan
+point(10:44:07.3205,-60:17:11.603) # point=circle color=cyan
+point(10:44:07.5561,-60:17:04.521) # point=circle color=cyan
+point(10:44:04.2594,-60:16:47.224) # point=circle color=cyan
+point(10:44:05.9718,-60:17:08.294) # point=circle color=cyan
+point(10:44:05.2466,-60:17:04.667) # point=circle color=cyan
+point(10:44:04.4221,-60:16:53.057) # point=circle color=cyan
+point(10:44:04.2051,-60:17:09.527) # point=circle color=cyan
+point(10:44:07.7202,-60:17:36.182) # point=circle color=cyan
+point(10:44:07.5181,-60:17:40.996) # point=circle color=cyan
+point(10:44:12.3217,-60:17:09.620) # point=circle color=cyan
+point(10:44:11.9704,-60:17:14.059) # point=circle color=cyan
+point(10:44:12.0170,-60:17:20.733) # point=circle color=cyan
+point(10:44:08.6146,-60:17:42.511) # point=circle color=cyan
+point(10:44:24.0630,-60:16:09.848) # point=circle color=cyan
+point(10:44:13.3600,-60:17:40.769) # point=circle color=cyan
+point(10:44:12.4474,-60:17:37.037) # point=circle color=cyan
+point(10:44:12.4911,-60:17:32.713) # point=circle color=cyan
+point(10:44:13.1549,-60:17:35.203) # point=circle color=cyan
+point(10:44:10.3210,-60:17:50.263) # point=circle color=cyan
+point(10:44:09.7408,-60:17:46.848) # point=circle color=cyan
+point(10:44:06.9617,-60:18:09.851) # point=circle color=cyan
+point(10:44:06.8774,-60:18:11.876) # point=circle color=cyan
+point(10:44:06.2626,-60:18:17.226) # point=circle color=cyan
+point(10:44:05.7299,-60:18:24.422) # point=circle color=cyan
+point(10:44:04.8512,-60:18:22.763) # point=circle color=cyan
+point(10:44:05.9957,-60:18:20.490) # point=circle color=cyan
+point(10:44:11.3577,-60:18:22.356) # point=circle color=cyan
+point(10:44:06.7668,-60:18:29.087) # point=circle color=cyan
+point(10:44:06.2103,-60:18:29.717) # point=circle color=cyan
+point(10:44:04.1839,-60:18:33.353) # point=circle color=cyan
+point(10:44:05.7377,-60:18:29.008) # point=circle color=cyan
+point(10:44:09.1241,-60:17:53.381) # point=circle color=cyan
+point(10:44:07.5515,-60:18:22.589) # point=circle color=cyan
+point(10:44:11.8062,-60:17:53.384) # point=circle color=cyan
+point(10:44:07.9804,-60:18:23.464) # point=circle color=cyan
+point(10:44:11.9367,-60:18:17.677) # point=circle color=cyan
+point(10:44:06.0837,-60:18:33.151) # point=circle color=cyan
+point(10:44:05.6772,-60:18:33.828) # point=circle color=cyan
+point(10:44:05.2709,-60:18:33.902) # point=circle color=cyan
+point(10:44:04.7485,-60:18:40.607) # point=circle color=cyan
+point(10:44:11.2804,-60:18:34.535) # point=circle color=magenta
+point(10:44:09.8410,-60:18:38.943) # point=circle color=magenta
+point(10:44:09.3576,-60:18:47.382) # point=circle color=magenta
+point(10:44:08.8304,-60:18:47.633) # point=circle color=magenta
+point(10:44:05.2165,-60:19:42.672) # point=circle color=magenta
+point(10:44:04.6340,-60:19:42.655) # point=circle color=magenta
+point(10:44:04.1767,-60:19:42.023) # point=circle color=magenta
+point(10:44:11.9007,-60:18:48.183) # point=circle color=magenta
+point(10:44:12.6889,-60:18:52.141) # point=circle color=magenta
+point(10:44:15.2470,-60:18:06.873) # point=circle color=magenta
+point(10:44:12.2026,-60:18:26.256) # point=circle color=magenta
+point(10:44:06.0177,-60:19:53.572) # point=circle color=magenta
+point(10:44:06.9189,-60:19:49.150) # point=circle color=magenta
+point(10:44:02.9814,-60:19:36.795) # point=circle color=magenta
+point(10:44:12.7168,-60:19:10.340) # point=circle color=magenta
+point(10:44:19.8638,-60:19:19.096) # point=circle color=magenta
+point(10:44:14.8218,-60:19:19.712) # point=circle color=magenta
+point(10:44:49.8055,-60:13:34.884) # point=circle color=red
+point(10:44:50.6519,-60:13:35.081) # point=circle color=red
+point(10:44:50.8495,-60:13:43.610) # point=circle color=red
+point(10:44:40.1472,-60:13:06.338) # point=circle color=red
+point(10:44:38.0883,-60:13:03.172) # point=circle color=red
+point(10:44:47.8661,-60:13:27.268) # point=circle color=red
+point(10:44:48.0139,-60:13:35.055) # point=circle color=red
+point(10:44:44.0622,-60:12:34.900) # point=circle color=red
+point(10:44:04.8473,-60:13:33.054) # point=circle
+point(10:44:15.4487,-60:11:53.916) # point=circle
+point(10:44:18.6963,-60:11:46.562) # point=circle
+point(10:44:17.3871,-60:12:12.228) # point=circle
+point(10:44:43.4351,-60:13:34.261) # point=circle color=red
+point(10:44:44.1297,-60:13:43.909) # point=circle color=red
+point(10:43:59.7096,-60:13:10.842) # point=circle
+point(10:44:14.3604,-60:12:06.201) # point=circle
+point(10:44:42.5891,-60:13:33.508) # point=circle color=red
+point(10:44:40.5423,-60:13:11.701) # point=circle color=red
+point(10:44:07.7203,-60:13:38.085) # point=circle
+point(10:44:13.5198,-60:12:36.161) # point=circle
+point(10:44:13.0509,-60:12:39.903) # point=circle
+point(10:44:21.0947,-60:12:51.579) # point=circle
+point(10:44:04.8474,-60:12:30.768) # point=circle
+point(10:44:04.8449,-60:12:35.217) # point=circle
+point(10:44:43.0284,-60:14:10.958) # point=circle color=red
+point(10:44:42.8701,-60:14:29.902) # point=circle color=red
+point(10:44:43.1557,-60:14:37.667) # point=circle color=red
+point(10:44:42.8601,-60:14:48.434) # point=circle color=red
+point(10:44:14.2194,-60:13:25.030) # point=circle
+point(10:44:29.2279,-60:14:41.682) # point=circle color=blue
+point(10:44:23.7317,-60:14:13.841) # point=circle color=blue
+point(10:44:27.8762,-60:14:52.365) # point=circle color=blue
+point(10:44:28.4995,-60:14:57.030) # point=circle color=blue
+point(10:44:29.9299,-60:14:30.266) # point=circle color=blue
+point(10:44:26.9668,-60:15:49.025) # point=circle color=cyan
+point(10:44:28.6170,-60:15:37.200) # point=circle color=cyan
+point(10:44:23.0324,-60:16:06.847) # point=circle color=cyan
+point(10:44:26.1794,-60:15:49.868) # point=circle color=cyan
+point(10:44:17.4257,-60:16:08.108) # point=circle color=cyan
+point(10:44:15.6884,-60:16:22.738) # point=circle color=cyan
+point(10:44:15.5489,-60:16:25.052) # point=circle color=cyan
+point(10:44:15.5473,-60:16:28.399) # point=circle color=cyan
+point(10:44:14.8506,-60:16:37.907) # point=circle color=cyan
+point(10:44:14.6409,-60:16:42.020) # point=circle color=cyan
+point(10:44:14.0163,-60:16:46.470) # point=circle color=cyan
+point(10:44:13.5976,-60:16:51.776) # point=circle color=cyan
+point(10:44:13.4621,-60:16:45.594) # point=circle color=cyan
+point(10:44:08.5197,-60:16:40.653) # point=circle color=cyan
+point(10:44:06.6236,-60:16:15.535) # point=circle color=cyan
+point(10:44:06.6580,-60:15:40.073) # point=circle color=cyan
+point(10:44:07.5528,-60:16:41.434) # point=circle color=cyan
+point(10:44:23.3943,-60:15:47.725) # point=circle color=cyan
+point(10:44:22.5576,-60:15:43.771) # point=circle color=cyan
+point(10:44:18.7404,-60:16:08.912) # point=circle color=cyan
+point(10:44:18.3452,-60:16:11.372) # point=circle color=cyan
+point(10:44:08.0808,-60:17:14.278) # point=circle color=cyan
+point(10:44:07.3203,-60:17:11.939) # point=circle color=cyan
+point(10:44:07.5961,-60:17:14.264) # point=circle color=cyan
+point(10:44:05.3151,-60:16:28.983) # point=circle color=cyan
+point(10:44:05.9718,-60:17:08.294) # point=circle color=cyan
+point(10:44:05.2466,-60:17:04.667) # point=circle color=cyan
+point(10:44:04.4221,-60:16:53.057) # point=circle color=cyan
+point(10:44:04.2051,-60:17:09.527) # point=circle color=cyan
+point(10:44:07.7202,-60:17:36.182) # point=circle color=cyan
+point(10:44:07.5181,-60:17:40.996) # point=circle color=cyan
+point(10:44:12.3217,-60:17:09.620) # point=circle color=cyan
+point(10:44:11.9704,-60:17:14.059) # point=circle color=cyan
+point(10:44:12.0170,-60:17:20.733) # point=circle color=cyan
+point(10:44:08.6146,-60:17:42.511) # point=circle color=cyan
+point(10:44:24.0630,-60:16:09.848) # point=circle color=cyan
+point(10:44:13.3600,-60:17:40.769) # point=circle color=cyan
+point(10:44:12.4474,-60:17:37.037) # point=circle color=cyan
+point(10:44:12.4911,-60:17:32.713) # point=circle color=cyan
+point(10:44:13.1549,-60:17:35.203) # point=circle color=cyan
+point(10:44:10.3210,-60:17:50.263) # point=circle color=cyan
+point(10:44:09.7408,-60:17:46.848) # point=circle color=cyan
+point(10:44:06.7361,-60:18:09.005) # point=circle color=cyan
+point(10:44:06.6510,-60:18:12.709) # point=circle color=cyan
+point(10:44:05.3582,-60:18:17.759) # point=circle color=cyan
+point(10:44:05.7299,-60:18:24.422) # point=circle color=cyan
+point(10:44:05.1910,-60:18:21.374) # point=circle color=cyan
+point(10:44:06.0359,-60:18:16.013) # point=circle color=cyan
+point(10:44:07.7540,-60:17:57.898) # point=circle color=cyan
+point(10:44:06.7668,-60:18:29.087) # point=circle color=cyan
+point(10:44:06.0594,-60:18:29.993) # point=circle color=cyan
+point(10:44:04.4087,-60:18:35.599) # point=circle color=cyan
+point(10:44:05.4349,-60:18:31.519) # point=circle color=cyan
+point(10:44:07.5374,-60:18:02.293) # point=circle color=cyan
+point(10:44:07.5515,-60:18:22.589) # point=circle color=cyan
+point(10:44:08.9243,-60:18:30.535) # point=circle color=cyan
+point(10:44:07.9804,-60:18:23.464) # point=circle color=cyan
+point(10:44:13.7135,-60:18:04.848) # point=circle color=cyan
+point(10:44:06.0837,-60:18:33.151) # point=circle color=cyan
+point(10:44:05.6772,-60:18:33.828) # point=circle color=cyan
+point(10:44:05.2709,-60:18:33.902) # point=circle color=cyan
+point(10:44:05.3161,-60:18:36.145) # point=circle color=cyan
+point(10:44:11.2804,-60:18:34.535) # point=circle color=magenta
+point(10:44:09.8410,-60:18:38.943) # point=circle color=magenta
+point(10:44:09.3576,-60:18:47.382) # point=circle color=magenta
+point(10:44:08.8304,-60:18:47.633) # point=circle color=magenta
+point(10:44:05.2165,-60:19:42.672) # point=circle color=magenta
+point(10:44:04.6340,-60:19:42.655) # point=circle color=magenta
+point(10:44:04.1767,-60:19:42.023) # point=circle color=magenta
+point(10:44:11.9007,-60:18:48.183) # point=circle color=magenta
+point(10:44:13.5009,-60:18:56.194) # point=circle color=magenta
+point(10:44:15.2470,-60:18:06.873) # point=circle color=magenta
+point(10:44:12.2026,-60:18:26.256) # point=circle color=magenta
+point(10:44:06.0177,-60:19:53.572) # point=circle color=magenta
+point(10:44:06.9189,-60:19:49.150) # point=circle color=magenta
+point(10:44:02.9814,-60:19:36.795) # point=circle color=magenta
+point(10:44:13.7499,-60:19:06.337) # point=circle color=magenta
+point(10:44:19.8638,-60:19:19.096) # point=circle color=magenta
+point(10:44:14.8218,-60:19:19.712) # point=circle color=magenta
+point(10:44:48.7247,-60:13:26.475) # point=circle color=red
+point(10:44:50.6519,-60:13:35.081) # point=circle color=red
+point(10:44:50.8495,-60:13:43.610) # point=circle color=red
+point(10:44:33.4960,-60:13:02.599) # point=circle color=red
+point(10:44:37.2774,-60:13:00.808) # point=circle color=red
+point(10:44:47.8661,-60:13:27.268) # point=circle color=red
+point(10:44:48.0139,-60:13:35.055) # point=circle color=red
+point(10:44:40.8629,-60:12:30.429) # point=circle color=red
+point(10:44:00.4028,-60:13:44.603) # point=circle
+point(10:44:17.3422,-60:11:51.948) # point=circle
+point(10:44:17.4480,-60:11:57.012) # point=circle
+point(10:44:17.4434,-60:12:07.392) # point=circle
+point(10:44:43.4351,-60:13:34.261) # point=circle color=red
+point(10:44:44.1297,-60:13:43.909) # point=circle color=red
+point(10:44:15.1052,-60:12:08.815) # point=circle
+point(10:44:14.3604,-60:12:06.201) # point=circle
+point(10:44:42.5891,-60:13:33.508) # point=circle color=red
+point(10:44:35.6252,-60:13:19.689) # point=circle color=red
+point(10:44:21.7014,-60:12:54.109) # point=circle
+point(10:44:13.7918,-60:12:32.943) # point=circle
+point(10:44:13.0509,-60:12:39.903) # point=circle
+point(10:44:20.3360,-60:12:54.786) # point=circle
+point(10:44:04.8474,-60:12:30.768) # point=circle
+point(10:44:04.8449,-60:12:35.217) # point=circle
+point(10:44:43.0284,-60:14:10.958) # point=circle color=red
+point(10:44:32.8651,-60:13:00.998) # point=circle color=red
+point(10:44:43.1557,-60:14:37.667) # point=circle color=red
+point(10:44:42.9383,-60:14:47.274) # point=circle color=red
+point(10:44:14.2194,-60:13:25.030) # point=circle
+point(10:44:23.2559,-60:15:20.660) # point=circle color=blue
+point(10:44:23.7317,-60:14:13.841) # point=circle color=blue
+point(10:44:27.8762,-60:14:52.365) # point=circle color=blue
+point(10:44:28.7689,-60:15:01.066) # point=circle color=blue
+point(10:44:29.6059,-60:14:27.842) # point=circle color=blue
+point(10:44:26.5557,-60:15:51.074) # point=circle color=cyan
+point(10:44:28.7304,-60:15:30.352) # point=circle color=cyan
+point(10:44:28.1856,-60:15:38.322) # point=circle color=cyan
+point(10:44:11.8872,-60:16:00.570) # point=circle color=cyan text={10}
+point(10:44:11.7216,-60:15:57.737) # point=circle color=cyan text={11}
+point(10:44:15.1176,-60:16:16.424) # point=circle color=cyan text={20}
+point(10:44:14.5527,-60:16:11.594) # point=circle color=cyan
+point(10:44:12.2761,-60:16:09.487) # point=circle color=cyan text={12}
+point(10:44:05.0522,-60:16:36.790) # point=circle color=cyan
+point(10:44:15.3070,-60:16:19.195) # point=circle color=cyan
+point(10:44:14.8131,-60:16:13.545) # point=circle color=cyan
+point(10:44:06.6732,-60:16:36.256) # point=circle color=cyan
+point(10:44:15.3070,-60:16:19.195) # point=circle color=cyan
+point(10:44:15.3070,-60:16:19.195) # point=circle color=cyan
+point(10:44:15.3070,-60:16:19.195) # point=circle color=cyan
+point(10:44:08.4490,-60:16:08.343) # point=circle color=cyan
+point(10:44:06.8411,-60:15:35.375) # point=circle color=cyan
+point(10:44:06.7408,-60:17:06.637) # point=circle color=cyan
+point(10:44:05.3369,-60:17:12.642) # point=circle color=cyan
+point(10:44:20.1638,-60:16:36.440) # point=circle color=cyan
+point(10:44:15.5417,-60:17:08.575) # point=circle color=cyan
+point(10:44:13.2871,-60:16:59.446) # point=circle color=cyan
+point(10:44:16.6804,-60:16:48.448) # point=circle color=cyan
+point(10:44:15.3663,-60:16:57.149) # point=circle color=cyan
+point(10:44:08.9295,-60:16:34.282) # point=circle color=cyan
+point(10:44:03.2750,-60:18:12.076) # point=circle color=cyan
+point(10:44:02.6668,-60:18:21.575) # point=circle color=cyan
+point(10:44:03.0844,-60:18:15.990) # point=circle color=cyan
+point(10:44:02.8044,-60:18:44.254) # point=circle color=cyan
+point(10:44:01.8394,-60:18:19.029) # point=circle color=cyan
+point(10:44:01.4845,-60:18:46.172) # point=circle color=cyan
+point(10:44:07.2477,-60:18:35.630) # point=circle color=magenta
+point(10:44:06.9634,-60:18:59.809) # point=circle color=magenta
+point(10:44:12.2207,-60:19:13.261) # point=circle color=magenta
+point(10:44:16.7837,-60:19:04.512) # point=circle color=magenta
+point(10:44:12.6212,-60:18:31.349) # point=circle color=magenta
+point(10:44:12.0751,-60:18:38.590) # point=circle color=magenta
+point(10:44:12.7234,-60:18:44.251) # point=circle color=magenta
+point(10:44:09.7004,-60:18:59.717) # point=circle color=magenta
+point(10:44:05.6186,-60:19:20.962) # point=circle color=magenta
+point(10:44:03.6044,-60:19:31.381) # point=circle color=magenta
+point(10:44:13.0503,-60:19:30.043) # point=circle color=magenta
+point(10:44:14.7873,-60:19:30.089) # point=circle color=magenta
+point(10:44:21.8957,-60:19:36.309) # point=circle color=magenta
+point(10:44:04.8157,-60:11:50.456) # point=circle
+point(10:44:02.1707,-60:11:42.714) # point=circle
+point(10:44:02.2608,-60:13:47.681) # point=circle
+point(10:44:05.7831,-60:13:40.132) # point=circle
+point(10:44:01.7101,-60:11:21.012) # point=circle
+point(10:44:25.7086,-60:11:42.549) # point=circle

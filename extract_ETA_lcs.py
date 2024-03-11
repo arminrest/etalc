@@ -442,7 +442,7 @@ class extract_LE_lcclass(pdastrostatsclass):
         
         #delme = []
         # Get M5SIGMA, but for this we need to access the sw.dcmp files!
-        for ix in self.imtable.getindices():
+        for ix in ixs_good:
             swname = f'{self.datarootdir}/{self.imtable.t.loc[ix,"IMSUBD"]}/{self.imtable.t.loc[ix,"IMNAME"]}'
             swdcmp = re.sub('\.fits','.dcmp',swname)
             self.imtable.t.loc[ix,'swdcmp'] = swdcmp
@@ -456,9 +456,9 @@ class extract_LE_lcclass(pdastrostatsclass):
                 self.imtable.t.loc[ix,'filter'] = 'x'
                 self.imtable.t['error']=1
                 self.imtable.t['skip']=1
+
+        ixs_good =  self.imtable.ix_equal('skip',0)
                 
-            
-            
         #print(' '.join(delme))
         self.imtable.fitsheader2table('swdcmp',indices=ixs_good,
                                       optionalfitskey=['M5SIGMA'])
@@ -492,28 +492,6 @@ class extract_LE_lcclass(pdastrostatsclass):
 
         return(0)
         
-    def find_tmpl_delme(self,tmpl_filepattern=None):
-        if tmpl_filepattern is None:
-            tmpl_filepattern = os.path.join(self.tmpl_dir,f"{self.field}.*_ooi_{self.filt}*.sw.fits")
-        if self.verbose: print(f'template filepattern: {tmpl_filepattern}')
-        tmpl_names = glob.glob(tmpl_filepattern)
-        if len(tmpl_names) == 0:
-            raise RuntimeError('No templates found')
-        elif len(tmpl_names)>1:
-            if self.verbose: print(f'templates: {tmpl_names}')
-            raise RuntimeError('More than one template found! Not yet implemented, probably need to add template ID option to give user choices?')
-        else:
-            self.tmpl_name=tmpl_names[0]
-        print(f'template: {self.tmpl_name}')
-        m = re.search('\.(\d+)_ooi_',os.path.basename(self.tmpl_name))
-        if m is None:
-            raise RuntimeError(f'Could not get exnum ID from {os.path.basename(self.tmpl_name)} with pattern "\.(\d+)_ooi_"')
-        self.tmpl_expnum = m.groups()[0]
-        print(f'template expnum: {self.tmpl_expnum}')
-        return(0)
-             
-
-
     def find_tmpl(self,tmplexpnum):
         tmpl_filepattern = os.path.join(self.tmpl_dir,f"{self.field}.*.{tmplexpnum}_ooi_{self.filt}*.sw.fits")
         if self.verbose: print(f'template filepattern: {tmpl_filepattern}')
@@ -954,7 +932,11 @@ if __name__=='__main__':
 
     # find images
     etalc.find_diffims()
-    filters = sorted(unique(etalc.imtable.t['filter']))
+
+    # only use the ones that should not be skipped!
+    ixs_good =  etalc.imtable.ix_equal('skip',0)
+
+    filters = sorted(unique(etalc.imtable.t.loc[ixs_good,'filter']))
     if args.filters is not None:
         filters=AandB(filters,args.filters)
     print(f'Filters: {" ".join(filters)}')
@@ -962,9 +944,11 @@ if __name__=='__main__':
     # Load the positions
     etalc.postable.load_posfile(imagename=etalc.imtable.t.loc[0,'diffim'])
     
+
+
     for filt in filters:
         etalc.filt=filt
-        ixs_filter = etalc.imtable.ix_equal('filter',filt)
+        ixs_filter = etalc.imtable.ix_equal('filter',filt,indices=ixs_good)
         tmplexpnums = sorted(unique(etalc.imtable.t.loc[ixs_filter,'tmplexpnum']))
         print(f'\n#########################\n### Filter {filt}, template expnums: {" ".join(tmplexpnums)}\n#########################')
         

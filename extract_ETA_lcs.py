@@ -132,7 +132,7 @@ class positionclass(pdastroclass):
                 wcshdr = fits.getheader(imagename)
             field_wcs = WCS(wcshdr)
     
-            (ixs,coords)=self.radeccols_to_SkyCoord(racol='RA',deccol='Dec')
+            (ixs,coords)=self.radeccols_to_SkyCoord(racol='ra',deccol='dec')
             self.t['x'],self.t['y'] = field_wcs.world_to_pixel(coords)
     
             # We should do better rounding here...

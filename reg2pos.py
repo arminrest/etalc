@@ -183,7 +183,7 @@ if __name__=='__main__':
         reg2pos.convert_region2pos(regionfile,globalcolor=args.globalcolor)
         
     if args.outputfile == 'auto': 
-        outputfilename = re.sub('\.reg','.lcpos.txt',args.regionfiles[0])
+        outputfilename = re.sub('.lcpos\.reg|\.reg','.lcpos.txt',args.regionfiles[0])
         if outputfilename==args.regionfiles[0]: raise RuntimeError(f'Could not derive auto outputfilename from {args.regionfiles[0]}')
     else:
         outputfilename = args.outputfile 

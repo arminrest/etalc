@@ -24,19 +24,30 @@ class reg2posclass(positionclass):
         positionclass.__init__(self)
         self.verbose=0
         
-        self.radec_searchpattern = 'circle\(([0-9\:\.]+)\,([0-9\:\-\.]+)|([0-9\:\.]+)\,([0-9\:\-\.]+)'
+        #self.radec_searchpattern = 'circle\(([0-9\:\.]+)\,([0-9\:\-\.]+)|([0-9\:\.]+)\,([0-9\:\-\.]+)'
+        self.set_shape_radec_searchpattern(shape='circle',radec_searchpattern='\(([0-9\:\.]+)\,([0-9\:\-\.]+)|([0-9\:\.]+)\,([0-9\:\-\.]+)')
         
     def define_arguments(self,parser=None,usage=None,conflict_handler='resolve'):
         if parser is None:
             parser = argparse.ArgumentParser(usage=usage,conflict_handler=conflict_handler)
         parser.add_argument("regionfiles", nargs="+", help="list of names of the ds9 region file", type=str)
         parser.add_argument("-o","--outputfile", default='auto', help="output position filename. if 'auto', then the output filename is equal the region filename, with .reg substituted with lcpos.txt", type=str)
+        parser.add_argument("--shape", default='circle', help="define the shape to look for in the region file in order to get RA/Dec  (default=%(default)s)", type=str)
+        parser.add_argument("--radec_searchpattern", default='\(([0-9\:\.]+)\,([0-9\:\-\.]+)|([0-9\:\.]+)\,([0-9\:\-\.]+)', help="define the search pattern to look for RA/Dec in the lines starting with 'shape' (default=%(default)s)", type=str)
         parser.add_argument("--globalcolor", default=None, help="define the global color. If None, then script will try to glean it from region file  (default=%(default)s)", type=str)
         parser.add_argument("-a","--add2file", action='store_true', default=None, help='Add the new positions to the output file specified with --outputfile. This does not work with outputfile="auto".')
         parser.add_argument('-v','--verbose', default=0, action='count')
         
         self.define_optional_arguments(parser)
         return(parser)
+
+    def set_shape_radec_searchpattern(self,shape='circle',radec_searchpattern='\(([0-9\:\.]+)\,([0-9\:\-\.]+)|([0-9\:\.]+)\,([0-9\:\-\.]+)'):
+        if shape is not None:
+            self.shape_radec_searchpattern = f'{shape}'
+        else:
+            self.shape_radec_searchpattern = ''
+        self.shape = shape
+        self.shape_radec_searchpattern += f'{radec_searchpattern}'
     
     def convert_region2pos(self,regioninfo,globalcolor=None,group0=None,ID0=None):
         """
@@ -75,7 +86,7 @@ class reg2posclass(positionclass):
             raise RuntimeError(f'Can\'t figure out what to do with region info {regioninfo}')
         fk5=False
         
-        pattern=re.compile(self.radec_searchpattern)
+        pattern=re.compile(self.shape_radec_searchpattern)
         
         tmptable = pdastroclass()
 
@@ -158,6 +169,7 @@ if __name__=='__main__':
     parser = reg2pos.define_arguments()
     args = parser.parse_args()
     
+    reg2pos.set_shape_radec_searchpattern(args.shape,args.radec_searchpattern)
     reg2pos.verbose=args.verbose
     
     if args.add2file:
